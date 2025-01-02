@@ -1,4 +1,4 @@
-###잔액 충전/조회 API
+### 잔액 충전/조회 API
 ```mermaid
 sequenceDiagram
     actor User as 사용자
@@ -12,7 +12,7 @@ sequenceDiagram
     API->>User: 응답
 ```
 
-###상품 조회 API
+### 상품 조회 API
 ```mermaid
 sequenceDiagram
     actor User as 사용자
@@ -29,7 +29,7 @@ sequenceDiagram
     API->>User: 응답 (상품 목록, 가격, 재고)
 ```
 
-###상위 상품 조회 API
+### 상위 상품 조회 API
 ```mermaid
 sequenceDiagram
     actor User as 사용자
@@ -43,7 +43,7 @@ sequenceDiagram
     API->>User: 응답 (상품 이름, 가격, 판매순위 등)
 ```
 
-###선착순 쿠폰 발급 API
+### 선착순 쿠폰 발급 API
 ```mermaid
 sequenceDiagram
     actor User as 사용자
@@ -68,7 +68,7 @@ sequenceDiagram
     end
     CouponDB-->>CouponService: 락 해제
 ```
-###주문/결제 API
+### 주문/결제 API
 ```mermaid
 sequenceDiagram
     actor User as 사용자
