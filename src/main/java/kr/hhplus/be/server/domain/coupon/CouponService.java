@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static kr.hhplus.be.server.common.ErrorCode.*;
+
 @Service
 @RequiredArgsConstructor
 public class CouponService {
@@ -30,7 +32,7 @@ public class CouponService {
 
     public List<CouponsResponse> getCoupons(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("등록되지 않은 사용자입니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
         return userCouponRepository.getCouponsByUser(user);
     }
@@ -39,20 +41,20 @@ public class CouponService {
     public void issueCoupon(Long userId, Long couponId) {
         // 유저와 쿠폰 조회
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("등록되지 않은 사용자입니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
         Coupon coupon = couponRepository.findById(couponId)
-                .orElseThrow(() -> new ResourceNotFoundException("쿠폰을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(COUPON_NOT_FOUND));
 
         // 1. 쿠폰이 발급 가능한지 체크
         if (coupon.getRemainingQuantity() <= 0) {
-            throw new InsufficientStockException("쿠폰 수량이 부족합니다.");
+            throw new InsufficientStockException(COUPON_EXHAUSTED);
         }
 
         // 2. 유저가 발급할 수 있는 쿠폰 수량 초과 체크
         long issuedCouponCount = userCouponRepository.countByUserAndCoupon(user, coupon);
         if (issuedCouponCount >= MAX_COUPON_ISSUE_LIMIT) {
-            throw new CouponLimitExceededException("유저별 동일 쿠폰 발급 한도를 초과했습니다.");
+            throw new CouponLimitExceededException(COUPON_LIMIT_EXCEEDED);
         }
 
         // 3. 쿠폰 발급 (비관적 락 사용)
@@ -68,19 +70,18 @@ public class CouponService {
             userCouponRepository.save(userCoupon);
 
         } else {
-            throw new InsufficientStockException("쿠폰 수량이 부족합니다.");
+            throw new InsufficientStockException(COUPON_EXHAUSTED);
         }
 
     }
 
     public Coupon useCoupon(User user, Long couponId) {
 
-        Coupon coupon = couponRepository.findById(couponId).orElseThrow(
-                InvalidCouponException::new);
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow(() -> new InvalidCouponException(COUPON_NOT_FOUND));
 
         UserCoupon userCoupon = userCouponRepository.findTopByUserAndCouponAndUsedIsFalse(user, coupon);
         if (userCoupon == null) {
-            throw new InvalidCouponException("사용자가 보유하고 있지 않은 쿠폰입니다.");
+            throw new InvalidCouponException(COUPON_NOT_OWNED);
         }
 
         userCoupon.use();

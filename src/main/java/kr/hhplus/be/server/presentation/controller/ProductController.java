@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.hhplus.be.server.common.ErrorResponse;
+import kr.hhplus.be.server.common.ApiErrorResponse;
 import kr.hhplus.be.server.common.ApiGenericResponse;
 import kr.hhplus.be.server.common.exceptions.PageResponse;
 import kr.hhplus.be.server.domain.product.ProductService;
@@ -36,7 +36,7 @@ public class ProductController {
                     @ApiResponse(
                             responseCode = "500",
                             description = "서버 에러",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
             }
     )
     @GetMapping
@@ -58,13 +58,13 @@ public class ProductController {
                     @ApiResponse(
                             responseCode = "400",
                             description = "잘못된 요청 파라미터",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
             }
     )
     @GetMapping("/top")
     public List<ProductTopResponse> getTopProducts(
             @Parameter(description = "조회 기간", example = "5") @RequestParam(defaultValue = "3") Integer days,
-            @Parameter(description = "상품 개수", example = "10") @RequestParam Integer topN) {
+            @Parameter(description = "상품 개수", example = "10") @RequestParam(defaultValue = "5") Integer topN) {
         return productService.getTopSellingProducts(days, topN);
     }
 
@@ -80,7 +80,7 @@ public class ProductController {
                     @ApiResponse(
                             responseCode = "400",
                             description = "잘못된 요청 파라미터",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
             }
     )
     @GetMapping("/{productId}")

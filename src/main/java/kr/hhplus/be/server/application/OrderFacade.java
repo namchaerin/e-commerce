@@ -34,7 +34,7 @@ public class OrderFacade {
         // 유저 체크
         User user = userService.validateUser(userId);
 
-        // 2. 상품 재고 확인 및 잠금
+        // 상품 재고 확인 및 잠금
         BigDecimal totalAmount = productService.lockProductStock(items);
 
         // 쿠폰 사용 처리
@@ -51,9 +51,6 @@ public class OrderFacade {
 
         // 외부 데이터 플랫폼으로 결과 전송
         paymentService.sendPaymentResult(new OrderSuccessRequest(order));
-
-//        return new ApiGenericResponse1(TRUE, "주문 결제가 완료되었습니다.");
-//        return ApiGenericResponse.cre
 
     }
 }

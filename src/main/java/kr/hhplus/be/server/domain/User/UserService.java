@@ -4,6 +4,8 @@ import kr.hhplus.be.server.common.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static kr.hhplus.be.server.common.ErrorCode.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -12,7 +14,11 @@ public class UserService {
 
     public User validateUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(
-                () -> new ResourceNotFoundException("등록되지 않은 사용자입니다."));
+                () -> new ResourceNotFoundException(USER_NOT_FOUND));
+    }
+
+    public boolean checkUserExistence(Long userId) {
+        return userRepository.findById(userId).isPresent();
     }
 
 }
