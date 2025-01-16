@@ -1,13 +1,16 @@
 package kr.hhplus.be.server.common.exceptions;
 
+import kr.hhplus.be.server.common.ErrorCode;
+import lombok.Getter;
+
+@Getter
 public class InvalidCouponException extends RuntimeException {
 
-    public InvalidCouponException() {
-        super("사용할 수 없는 쿠폰입니다.");
-    }
+    private final ErrorCode errorCode;
 
-    public InvalidCouponException(String message) {
-        super(message);
+    public InvalidCouponException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 
 }
