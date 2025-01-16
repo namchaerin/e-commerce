@@ -5,6 +5,7 @@ import kr.hhplus.be.server.common.BaseEntity;
 import kr.hhplus.be.server.domain.User.User;
 import kr.hhplus.be.server.domain.coupon.Coupon;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Table(name = "user_order")
+@NoArgsConstructor
 public class Order extends BaseEntity {
 
     @ManyToOne
@@ -32,7 +34,7 @@ public class Order extends BaseEntity {
     public void create(User user, Coupon coupon, BigDecimal totalAmount) {
         this.user = user;
         this.coupon = coupon;
-        this.totalAmount = totalAmount.multiply(new BigDecimal(coupon.getDiscountRate()/100));
+        this.totalAmount = totalAmount.multiply(new BigDecimal(1 - coupon.getDiscountRate()/100));
         this.status = OrderStatus.PENDING;
         this.orderDateTime = LocalDateTime.now();
     }

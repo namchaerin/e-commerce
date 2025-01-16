@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import kr.hhplus.be.server.common.BaseEntity;
 import kr.hhplus.be.server.domain.product.Product;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class OrderItem extends BaseEntity {
 
     @ManyToOne
