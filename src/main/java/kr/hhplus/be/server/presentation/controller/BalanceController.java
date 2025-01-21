@@ -7,13 +7,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.hhplus.be.server.common.ApiGenericResponse;
-import kr.hhplus.be.server.common.ErrorResponse;
+import kr.hhplus.be.server.common.ApiErrorResponse;
 import kr.hhplus.be.server.domain.User.UserBalanceService;
 import kr.hhplus.be.server.presentation.dto.BalanceResponse;
+import kr.hhplus.be.server.presentation.dto.RechargeRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class BalanceController {
                     @ApiResponse(
                             responseCode = "400",
                             description = "잘못된 요청 파라미터",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
             }
     )
     @GetMapping("/{userId}")
@@ -54,14 +53,12 @@ public class BalanceController {
                     @ApiResponse(
                             responseCode = "400",
                             description = "잘못된 요청 파라미터",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiErrorResponse.class)))
             }
     )
-    @PostMapping("/{userId}")
-    public ApiGenericResponse<BalanceResponse>rechargeBalance(
-            @Parameter(description = "사용자 ID") @PathVariable Long userId,
-            @Parameter(description = "충전할 금액") @RequestParam BigDecimal rechargingBalance) {
-        return ApiGenericResponse.createSuccess(userBalanceService.updateBalance(userId,rechargingBalance));
+    @PostMapping
+    public ApiGenericResponse<BalanceResponse> rechargeBalance(@RequestBody RechargeRequest request) {
+        return ApiGenericResponse.createSuccess(userBalanceService.updateBalance(request.getUserId(), request.getAmount()));
     }
 
 }

@@ -3,11 +3,13 @@ package kr.hhplus.be.server.domain.payment;
 import jakarta.persistence.*;
 import kr.hhplus.be.server.common.BaseEntity;
 import kr.hhplus.be.server.domain.order.Order;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
 public class Payment extends BaseEntity {
 
     @OneToOne

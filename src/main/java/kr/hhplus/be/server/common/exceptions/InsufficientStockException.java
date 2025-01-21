@@ -1,13 +1,15 @@
 package kr.hhplus.be.server.common.exceptions;
 
+import kr.hhplus.be.server.common.ErrorCode;
+import lombok.Getter;
+
+@Getter
 public class InsufficientStockException extends RuntimeException {
 
-    public InsufficientStockException() {
-        super("재고가 부족합니다.");
-    }
+    private final ErrorCode errorCode;
 
-    public InsufficientStockException(String message) {
-        super(message);
+    public InsufficientStockException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
-
 }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+import static kr.hhplus.be.server.common.ErrorCode.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class UserBalanceService {
@@ -15,7 +17,7 @@ public class UserBalanceService {
 
     public BalanceResponse getBalanceByUserId(Long userId) {
         UserBalance balance = userBalanceRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("사용자의 계정이 존재하지 않습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
         return BalanceResponse.of(balance);
     }
@@ -23,7 +25,7 @@ public class UserBalanceService {
     public BalanceResponse updateBalance(Long userId, BigDecimal rechargingBalance) {
 
         UserBalance balance = userBalanceRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("사용자의 계정이 존재하지 않습니다."));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
         balance.addAmount(rechargingBalance);
 

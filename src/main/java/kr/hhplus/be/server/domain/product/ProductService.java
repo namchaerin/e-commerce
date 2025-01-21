@@ -2,10 +2,8 @@ package kr.hhplus.be.server.domain.product;
 
 import kr.hhplus.be.server.common.exceptions.InsufficientStockException;
 import kr.hhplus.be.server.common.exceptions.PageResponse;
-import kr.hhplus.be.server.common.exceptions.ProductNotFoundException;
 import kr.hhplus.be.server.common.exceptions.ResourceNotFoundException;
 import kr.hhplus.be.server.domain.order.OrderItemRepository;
-import kr.hhplus.be.server.domain.order.OrderStatus;
 import kr.hhplus.be.server.infrastructure.order.TopSellingItemDto;
 import kr.hhplus.be.server.presentation.dto.OrderItemDto;
 import kr.hhplus.be.server.presentation.dto.ProductResponse;
@@ -22,6 +20,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static kr.hhplus.be.server.common.ErrorCode.PRODUCT_NOT_FOUND;
+import static kr.hhplus.be.server.common.ErrorCode.PRODUCT_OUT_OF_STOCK;
 
 
 @Slf4j
@@ -50,7 +51,7 @@ public class ProductService {
         if (productRepository.findById(productId).isPresent()) {
             return ProductResponse.of(productRepository.findById(productId).get());
         } else {
-            throw new ResourceNotFoundException("조회하고자 하는 상품이 존재하지 않습니다.");
+            throw new ResourceNotFoundException(PRODUCT_NOT_FOUND);
         }
     }
 
@@ -69,11 +70,11 @@ public class ProductService {
         BigDecimal totalAmount = new BigDecimal("0.0");
         for (OrderItemDto item : items) {
             Product product = productRepository.findById(item.getProductId())
-                    .orElseThrow(ProductNotFoundException::new);
+                    .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
 
             // 재고 수량 확인
             if (product.getStock() < item.getQuantity()) {
-                throw new InsufficientStockException();
+                throw new InsufficientStockException(PRODUCT_OUT_OF_STOCK);
             }
 
             // 재고 잠금

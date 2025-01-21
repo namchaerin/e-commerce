@@ -1,14 +1,18 @@
 package kr.hhplus.be.server.common;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-public class ErrorResponse {
+@Setter
+@NoArgsConstructor
+public class ApiErrorResponse {
 
     private int errorCode;
     private String message;
 
-    public ErrorResponse(int errorCode, String message) {
+    public ApiErrorResponse(int errorCode, String message) {
         this.errorCode = errorCode;
         this.message = message;
     }
