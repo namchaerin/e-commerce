@@ -43,7 +43,7 @@ public class CouponService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
-        Coupon coupon = couponRepository.findById(couponId)
+        Coupon coupon = couponRepository.findByIdForUpdate(couponId)
                 .orElseThrow(() -> new ResourceNotFoundException(COUPON_NOT_FOUND));
 
         // 1. 쿠폰이 발급 가능한지 체크
@@ -57,21 +57,13 @@ public class CouponService {
             throw new CouponLimitExceededException(COUPON_LIMIT_EXCEEDED);
         }
 
-        // 3. 쿠폰 발급 (비관적 락 사용)
-        coupon = couponRepository.findByIdForUpdate(couponId);  // PESSIMISTIC_WRITE 락을 사용하여 동시성 문제 해결
+        // 3. 쿠폰 발급
+        coupon.updateRemainingQuantity(coupon.getRemainingQuantity() - 1);
+        couponRepository.save(coupon);
 
-        if (coupon.getRemainingQuantity() > 0) {
-            coupon.issueCoupon();
-            couponRepository.save(coupon);
-
-            // UserCoupon 저장 (쿠폰 발급)
-            UserCoupon userCoupon = new UserCoupon();
-            userCoupon.addCoupon(user, coupon);
-            userCouponRepository.save(userCoupon);
-
-        } else {
-            throw new InsufficientStockException(COUPON_EXHAUSTED);
-        }
+        UserCoupon userCoupon = new UserCoupon();
+        userCoupon.addCoupon(user, coupon);
+        userCouponRepository.save(userCoupon);
 
     }
 

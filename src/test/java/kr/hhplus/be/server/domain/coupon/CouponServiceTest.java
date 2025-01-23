@@ -82,7 +82,7 @@ class CouponServiceTest {
         coupon.updateRemainingQuantity(0);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(couponRepository.findById(couponId)).thenReturn(Optional.of(coupon));
+        when(couponRepository.findByIdForUpdate(couponId)).thenReturn(Optional.of(coupon));
 
         // when, then
         assertThrows(InsufficientStockException.class, () -> couponService.issueCoupon(userId, couponId));
@@ -101,7 +101,7 @@ class CouponServiceTest {
 
         // 유저가 이미 3개 발급한 상태
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(couponRepository.findById(couponId)).thenReturn(Optional.of(coupon));
+        when(couponRepository.findByIdForUpdate(couponId)).thenReturn(Optional.of(coupon));
         when(userCouponRepository.countByUserAndCoupon(user, coupon)).thenReturn(3L); // 3개 이미 발급됨
 
         // when, then
@@ -121,9 +121,8 @@ class CouponServiceTest {
 
         // 유저가 이미 2개 발급한 상태
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(couponRepository.findById(couponId)).thenReturn(Optional.of(coupon));
+        when(couponRepository.findByIdForUpdate(couponId)).thenReturn(Optional.of(coupon));
         when(userCouponRepository.countByUserAndCoupon(user, coupon)).thenReturn(2L);
-        when(couponRepository.findByIdForUpdate(couponId)).thenReturn(coupon);
 
         // when
         couponService.issueCoupon(userId, couponId);
