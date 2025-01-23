@@ -2,6 +2,7 @@ package kr.hhplus.be.server.application;
 
 import jakarta.transaction.Transactional;
 import kr.hhplus.be.server.domain.User.User;
+import kr.hhplus.be.server.domain.User.UserBalanceService;
 import kr.hhplus.be.server.domain.User.UserService;
 import kr.hhplus.be.server.domain.coupon.Coupon;
 import kr.hhplus.be.server.domain.coupon.CouponService;
@@ -27,6 +28,7 @@ public class OrderFacade {
     private final CouponService couponService;
     private final UserService userService;
     private final ProductService productService;
+    private final UserBalanceService userBalanceService;
 
 
     @Transactional
@@ -35,13 +37,16 @@ public class OrderFacade {
         User user = userService.validateUser(userId);
 
         // 상품 재고 확인 및 잠금
-        BigDecimal totalAmount = productService.lockProductStock(items);
+        BigDecimal totalAmount = productService.getTotalAmount(items);
 
         // 쿠폰 사용 처리
         Coupon coupon = couponService.useCoupon(user, couponId);
 
         // 주문 생성
         Order order = orderService.createOrder(user, coupon, totalAmount);
+
+        // 잔액 차감
+        userBalanceService.deductBalance(userId, totalAmount);
 
         // 결제
         paymentService.processPayment(order);

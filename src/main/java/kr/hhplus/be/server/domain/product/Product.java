@@ -17,6 +17,12 @@ public class Product extends BaseEntity {
     private Integer stock;
 
 
+    public Product(String name, BigDecimal price, Integer stock) {
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+    }
+
     public void updateStock(Integer stock) {
         if (stock >= 0) this.stock = stock;
     }

@@ -1,7 +1,8 @@
 package kr.hhplus.be.server.domain.product;
 
+import jakarta.transaction.Transactional;
 import kr.hhplus.be.server.common.exceptions.InsufficientStockException;
-import kr.hhplus.be.server.common.exceptions.PageResponse;
+import kr.hhplus.be.server.common.PageResponse;
 import kr.hhplus.be.server.common.exceptions.ResourceNotFoundException;
 import kr.hhplus.be.server.domain.order.OrderItemRepository;
 import kr.hhplus.be.server.infrastructure.order.TopSellingItemDto;
@@ -14,15 +15,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static kr.hhplus.be.server.common.ErrorCode.PRODUCT_NOT_FOUND;
-import static kr.hhplus.be.server.common.ErrorCode.PRODUCT_OUT_OF_STOCK;
+import static kr.hhplus.be.server.common.ErrorCode.*;
 
 
 @Slf4j
@@ -64,20 +63,18 @@ public class ProductService {
         return getProductTopResponses(topSellingProducts);
     }
 
-    // 상품 재고 잠금 및 수량 확인
     @Transactional
-    public BigDecimal lockProductStock(List<OrderItemDto> items) {
+    public BigDecimal getTotalAmount(List<OrderItemDto> items) {
         BigDecimal totalAmount = new BigDecimal("0.0");
         for (OrderItemDto item : items) {
-            Product product = productRepository.findById(item.getProductId())
+            Product product = productRepository.findByIdWithLock(item.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException(PRODUCT_NOT_FOUND));
 
             // 재고 수량 확인
             if (product.getStock() < item.getQuantity()) {
-                throw new InsufficientStockException(PRODUCT_OUT_OF_STOCK);
+                throw new InsufficientStockException(INSUFFICIENT_PRODUCT);
             }
 
-            // 재고 잠금
             product.updateStock(product.getStock() - item.getQuantity());
 
             totalAmount.add(product.getPrice().multiply(new BigDecimal(item.getQuantity())));
