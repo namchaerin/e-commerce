@@ -39,9 +39,6 @@ public class Coupon extends BaseEntity {
         this.code = code;
     }
 
-    public synchronized void issueCoupon() {
-        this.remainingQuantity -= 1;
-    }
 
     public void updateRemainingQuantity(Integer toQuantity) {
         this.remainingQuantity = toQuantity;
