@@ -1,11 +1,8 @@
 package kr.hhplus.be.server.domain.product;
 
-import kr.hhplus.be.server.common.exceptions.PageResponse;
+import kr.hhplus.be.server.common.PageResponse;
 import kr.hhplus.be.server.domain.order.OrderItemRepository;
-import kr.hhplus.be.server.infrastructure.order.TopSellingItemDto;
 import kr.hhplus.be.server.presentation.dto.ProductResponse;
-import kr.hhplus.be.server.presentation.dto.ProductTopResponse;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,14 +14,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

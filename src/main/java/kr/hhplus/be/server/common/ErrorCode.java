@@ -12,6 +12,14 @@ public enum ErrorCode {
     USER_SESSION_EXPIRED(1002, "User session expired.", HttpStatus.FORBIDDEN),
     INVALID_CREDENTIALS(1003, "Invalid credentials provided.", HttpStatus.UNAUTHORIZED),
 
+    // 잔액 관련 오류
+    INSUFFICIENT_BALANCE(30001, "Insufficient balance to complete the transaction", HttpStatus.BAD_REQUEST),
+    NEGATIVE_BALANCE(30002, "Balance cannot be negative", HttpStatus.BAD_REQUEST),
+    BALANCE_UPDATE_FAILED(30003, "Failed to update balance due to system error", HttpStatus.INTERNAL_SERVER_ERROR),
+    MAX_BALANCE_EXCEEDED(30004, "Maximum allowable balance exceeded", HttpStatus.BAD_REQUEST),
+    BALANCE_LOCKED(30005, "Balance is locked and cannot be modified", HttpStatus.FORBIDDEN),
+    BALANCE_NOT_FOUND(30006, "Balance record not found", HttpStatus.NOT_FOUND),
+
     // 주문 관련 오류
     ORDER_NOT_FOUND(2000, "Order not found.", HttpStatus.NOT_FOUND),
     ORDER_ALREADY_PROCESSED(2001, "Order already processed.", HttpStatus.CONFLICT),
@@ -40,6 +48,7 @@ public enum ErrorCode {
     PRODUCT_OUT_OF_STOCK(7001, "Product is out of stock.", HttpStatus.BAD_REQUEST),  // 상품이 품절됨
     PRODUCT_PRICE_INVALID(7002, "Product price is invalid.", HttpStatus.BAD_REQUEST),  // 상품 가격 오류
     PRODUCT_NOT_AVAILABLE(7003, "Product not available for this order.", HttpStatus.BAD_REQUEST),  // 상품이 해당 주문에 적용 불가
+    INSUFFICIENT_PRODUCT(7004, "Insufficient products.", HttpStatus.BAD_REQUEST),
 
     // 기타 서버 오류
     INTERNAL_SERVER_ERROR(9000, "Internal server error.", HttpStatus.INTERNAL_SERVER_ERROR),

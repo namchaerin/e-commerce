@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.hhplus.be.server.common.ApiErrorResponse;
 import kr.hhplus.be.server.common.ApiGenericResponse;
-import kr.hhplus.be.server.common.exceptions.PageResponse;
+import kr.hhplus.be.server.common.PageResponse;
 import kr.hhplus.be.server.domain.product.ProductService;
 import kr.hhplus.be.server.presentation.dto.ProductResponse;
 import kr.hhplus.be.server.presentation.dto.ProductTopResponse;
