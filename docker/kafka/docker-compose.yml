@@ -1,17 +1,5 @@
 version: '3'
 services:
-  mysql:
-    image: mysql:8.0
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=application
-      - MYSQL_PASSWORD=application
-      - MYSQL_DATABASE=hhplus
-    volumes:
-      - ./data/mysql/:/var/lib/mysql
-
   zookeeper:
     image: bitnami/zookeeper:latest
     container_name: zookeeper
@@ -47,7 +35,3 @@ services:
       - kafka
     ports:
       - "9090:8080"
-
-networks:
-  default:
-    driver: bridge
