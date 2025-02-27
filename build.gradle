@@ -31,6 +31,11 @@ dependencies {
     implementation("org.projectlombok:lombok:1.18.26")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.1")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.apache.kafka:kafka_2.13:3.9.0")
+	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.apache.kafka:kafka-clients:3.9.0")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation ("org.redisson:redisson-spring-boot-starter:3.43.0")
 	annotationProcessor 'org.projectlombok:lombok:1.18.26'
 
     // DB
@@ -41,6 +46,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mysql")
+	testImplementation("org.testcontainers:kafka:1.20.4")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
